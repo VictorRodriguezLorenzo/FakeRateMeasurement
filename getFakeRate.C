@@ -6,18 +6,22 @@ const Float_t muojetarray[njetet] = {10, 15, 20, 25, 30, 35, 45};
 const Float_t elejetarray[njetet] = {10, 15, 20, 25, 30, 35, 45};
 const Float_t colors     [njetet] = {kRed, kRed+1, kRed+2, kRed+3, kRed+4, kRed+5, kRed+6};
 
-const Float_t year_lumi[4] = {
+const Float_t year_lumi[6] = {
   19.5,  // 2016_HIPM
   17.0,  // 2016_noHIPM
   41.5,  // 2017
-  59.7   // 2018
+  59.7,  // 2018
+  0.0    // 2022 Not yet
+  21.1   // 2022EE Without Run2022E, only 2022FG PromptReco
 };
 
-const TString year_name[4] = {
+const TString year_name[6] = {
   "2016_HIPM",
   "2016_noHIPM",
   "2017",
-  "2018"
+  "2018",
+  "2022",
+  "2022EE"
 };
 
 
@@ -140,6 +144,8 @@ void getFakeRate(TString the_year      = "2016_HIPM",
   else if (the_year.Contains("HIPM"))   year_index = 0;
   else if (the_year.Contains("2017"))   year_index = 2;
   else if (the_year.Contains("2018"))   year_index = 3;
+  else if (the_year.Contains("2022"))   year_index = 4;
+  else if (the_year.Contains("2022EE"))   year_index = 5;
   else {
     printf("\n Wrong year format\n");
     return;

@@ -41,9 +41,19 @@ void runNanoFakes(TString year = "2017", TString filename = "NONE")
       path_mc   = "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Summer20UL18_106x_nAODv9_Full2018v9/MCl1loose2018v9__fakeSelKinMC/";
       path_data = "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Run2018_UL2018_nAODv9_Full2018v9/DATAl1loose2018v9__fakeSel/";
     }
+  else if (year == "2022")
+    {
+      path_mc   = "";
+      path_data = "";
+    }
+  else if (year == "2022EE")
+    {
+      path_mc   = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22EE_126x_nAODv11_Full2022v11/MCl1loose2022EEv11__fakeSelKinMC/";
+      path_data = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022_Prompt_nAODv11_Full2022v11/DATAl1loose2022EEv11__fakeSel/";
+    }
   else
     {
-      printf(" The year should be either 2016_noHIPM, 2016_HIPM, 2017 or 2018\n");
+      printf(" The year should be either 2016_noHIPM, 2016_HIPM, 2017, 2018, 2022 or 2022EE\n");
       return;
     }
 
@@ -59,7 +69,7 @@ void runNanoFakes(TString year = "2017", TString filename = "NONE")
       return;
     }
   
-  TString path = (filename.Contains("Run201")) ? path_data : path_mc;
+  TString path = (filename.Contains("Run20")) ? path_data : path_mc;
 
   TChain* mychain = new TChain("Events", "Events");
 

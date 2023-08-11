@@ -50,7 +50,7 @@ def submit():
     if year == "":
         print "BE CAREFUL! You did not introduce any year, so 2017 files are considered by default"
         year = "2017"
-    elif year != "2016_HIPM" and year != "2016_noHIPM" and year != "2017" and year != "2018":
+    elif year != "2016_HIPM" and year != "2016_noHIPM" and year != "2017" and year != "2018" and year != "2022" and year != "2022EE":
         print "The year given does not seem to be valid"
         return
 
@@ -91,6 +91,12 @@ def submit():
                     jobs.append(sample)
         elif year == "2018":
             if ("DYJetsToLL_M-10to50-LO__" in sample) or ("DYJetsToLL_M-50-LO__" in sample) or ("WJetsToLNu-LO__" in sample) or ("DoubleMuon" in sample) or ("EGamma" in sample):
+                if resubmit is False or not os.path.exists('results/'+sample):
+                    jobs.append(sample)
+        elif year == "2022":
+            pass # temporal
+        elif year == "2022EE":
+            if ("DYto2L-2Jets_MLL-50__" in sample) or ("DYto2L-2Jets_MLL-10to50__" in sample) or ("WToLNu-2Jets__" in sample) or ("Muon_" in sample) or ("EGamma" in sample):
                 if resubmit is False or not os.path.exists('results/'+sample):
                     jobs.append(sample)
 

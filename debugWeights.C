@@ -10,8 +10,8 @@
 // been applied.
 //
 //------------------------------------------------------------------------------
-void debugWeights(TString prefix = "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano",
-		  TString sample = "Summer20UL17_106x_nAODv9_Full2017v9/MCl1loose2017v9__fakeSelKinMC/nanoLatino_WJetsToLNu-LO__part")
+void debugWeights(TString prefix = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano",
+		  TString sample = "Summer22EE_126x_nAODv11_Full2022v11/MCl1loose2022EEv11__fakeSelKinMC/nanoLatino_WToLNu-2Jets__part")
 {
   TChain* chain = new TChain("Events");
 

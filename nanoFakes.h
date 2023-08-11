@@ -184,7 +184,7 @@ class nanoFakes : public TSelector
   TTreeReaderArray<Float_t> Lepton_eta = {fReader, "Lepton_eta"};
   TTreeReaderArray<Float_t> Lepton_phi = {fReader, "Lepton_phi"};
 
-  TTreeReaderArray<Float_t> Jet_btagDeepB = {fReader, "Jet_btagDeepB"};
+  TTreeReaderArray<Float_t> Jet_btagDeepFlavB = {fReader, "Jet_btagDeepFlavB"};
   TTreeReaderArray<Int_t> Lepton_muonIdx = {fReader, "Lepton_muonIdx"};
   TTreeReaderArray<Int_t> Muon_jetIdx = {fReader, "Muon_jetIdx"};
   TTreeReaderArray<Int_t> Lepton_electronIdx = {fReader, "Lepton_electronIdx"};
@@ -214,8 +214,8 @@ class nanoFakes : public TSelector
   //  TTreeReaderArray<Int_t> eleTightWP  = {fReader, "Lepton_isTightElectron_mvaFall17V2Iso_WP90"};
 
   // 2016 (pair 2)
-  TTreeReaderArray<Int_t> muonTightWP = {fReader, "Lepton_isTightMuon_cut_Tight80x"};
-  TTreeReaderArray<Int_t> eleTightWP  = {fReader, "Lepton_isTightElectron_mvaFall17V2Iso_WP90_tthmva_70"};
+  //TTreeReaderArray<Int_t> muonTightWP = {fReader, "Lepton_isTightMuon_cut_Tight80x"};
+  //TTreeReaderArray<Int_t> eleTightWP  = {fReader, "Lepton_isTightElectron_mvaFall17V2Iso_WP90_tthmva_70"};
 
   // 2016 (pair 3)
   //  TTreeReaderArray<Int_t> muonTightWP = {fReader, "Lepton_isTightMuon_cut_Tight80x_tthmva_80"};
@@ -241,6 +241,10 @@ class nanoFakes : public TSelector
   //  TTreeReaderArray<Int_t> muonTightWP = {fReader, "Lepton_isTightMuon_cut_Tight_HWWW"};
   //  TTreeReaderArray<Int_t> eleTightWP  = {fReader, "Lepton_isTightElectron_mvaFall17V2Iso_WP90_SS"};
 
+  // 2022EE PromptReco
+  TTreeReaderArray<Int_t> muonTightWP = {fReader, "Lepton_isTightMuon_cut_Tight_HWWW"};
+  TTreeReaderArray<Int_t> eleTightWP  = {fReader, "Lepton_isTightElectron_mvaWinter22V2Iso_WP90"};
+  
 
   nanoFakes(TTree * /*tree*/ =0) { }
   virtual ~nanoFakes() { }

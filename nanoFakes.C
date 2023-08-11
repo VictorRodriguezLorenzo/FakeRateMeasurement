@@ -62,7 +62,7 @@ void nanoFakes::Begin(TTree*)
   printf(" filename: %s\n", filename.Data());
   printf("\n");
   
-  if (!filename.Contains("Run201")) {
+  if (!filename.Contains("Run20")) {
 
     baseW            = {fReader, "baseW"};
     Xsec             = {fReader, "Xsec"};
@@ -70,7 +70,7 @@ void nanoFakes::Begin(TTree*)
     Generator_weight = {fReader, "Generator_weight"};
   }
 
-  ismc = (filename.Contains("Run201")) ? false : true;
+  ismc = (filename.Contains("Run20")) ? false : true;
 
   root_output = new TFile("results/" + filename + ".root", "recreate");
 
@@ -114,6 +114,24 @@ void nanoFakes::Begin(TTree*)
       eleHighPtPrescale  = 38.906;
       muonLowPtPrescale  =  8.561;
       muonHighPtPrescale = 45.781;
+    }
+  else if (year == "2022")
+    {
+      printf(" Reading %s prescales\n\n", year.Data());
+      
+      eleLowPtPrescale   = 0.0;  // Ele8
+      eleHighPtPrescale  = 0.0;
+      muonLowPtPrescale  = 0.0;
+      muonHighPtPrescale = 0.0; 
+    }
+  else if (year == "2022EE")
+    {
+      printf(" Reading %s prescales\n\n", year.Data());  // Temporal lumi for Run2022FG prompt reco data
+
+      eleLowPtPrescale   = 2.864891971;  // Ele8
+      eleHighPtPrescale  = 16.128280724; // Ele23
+      muonLowPtPrescale  = 3.845615262;  // Mu8
+      muonHighPtPrescale = 16.252956481; // Mu17
     }
 
 
@@ -612,22 +630,22 @@ void nanoFakes::FillAnalysisHistograms(int icut, int i)
     else if (btagDirectory == "bveto")
       {
 	btagDown = -10.0;
-	btagUp   = 0.1522;
+	btagUp   = 0.0614;
       }
     else if (btagDirectory == "loose")
       {
-	btagDown = 0.1522;
-	btagUp   = 0.4941;
+	btagDown = 0.0614;
+	btagUp   = 0.3196;
       }
     else if (btagDirectory == "mediumtight")
       {
-	btagDown = 0.4941;
+	btagDown = 0.3196;
 	btagUp   = 10.0;
       }
 
     if (channel == m &&
-	Jet_btagDeepB[Muon_jetIdx[Lepton_muonIdx[0]]] > btagDown &&
-	Jet_btagDeepB[Muon_jetIdx[Lepton_muonIdx[0]]] < btagUp) {
+	Jet_btagDeepFlavB[Muon_jetIdx[Lepton_muonIdx[0]]] > btagDown &&
+	Jet_btagDeepFlavB[Muon_jetIdx[Lepton_muonIdx[0]]] < btagUp) {
 
       
       // Loose muons
@@ -649,8 +667,8 @@ void nanoFakes::FillAnalysisHistograms(int icut, int i)
       }
 
     } else if (channel == e &&
-	       Jet_btagDeepB[Electron_jetIdx[Lepton_electronIdx[0]]] > btagDown &&
-	       Jet_btagDeepB[Electron_jetIdx[Lepton_electronIdx[0]]] < btagUp) {
+	       Jet_btagDeepFlavB[Electron_jetIdx[Lepton_electronIdx[0]]] > btagDown &&
+	       Jet_btagDeepFlavB[Electron_jetIdx[Lepton_electronIdx[0]]] < btagUp) {
       
       
       // Loose electrons
