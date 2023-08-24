@@ -2,7 +2,7 @@
 
 Log in to lxplus.
 
-    ssh -Y piedra@lxplus.cern.ch -o ServerAliveInterval=240
+    ssh -Y piedra@lxplus8.cern.ch -o ServerAliveInterval=240
     bash -l
 
 # First time
@@ -12,9 +12,9 @@ Setup the CMSSW release. The code `nanoFakes.C` fails with (at least) `10_2_0` a
     cd work
     mkdir fakes
 
-    export SCRAM_ARCH=slc7_amd64_gcc630
-    cmsrel CMSSW_10_1_0
-    cd CMSSW_10_1_0/src
+    export SCRAM_ARCH=el8_amd64_gcc11
+    cmsrel CMSSW_13_0_5_patch2
+    cd CMSSW_13_0_5_patch2/src
     cmsenv
 
 Original code.
@@ -67,6 +67,11 @@ Read trees without any mtw1 cut to debug the 2016_HIPM negative fakes.
 
     python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Summer20UL18_106x_nAODv9_Full2018v9/MCl1loose2018v9__fakeSelKinMC/ -y 2018
     python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Run2018_UL2018_nAODv9_Full2018v9/DATAl1loose2018v9__fakeSel -y 2018
+
+### 2022EE
+
+    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22EE_126x_nAODv11_Full2022v11/MCl1loose2022EEv11__fakeSelKinMC/ -y 2022EE
+    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022_Prompt_nAODv11_Full2022v11/DATAl1loose2022EEv11__fakeSel -y 2022EE
 
 # Babysit jobs
 
