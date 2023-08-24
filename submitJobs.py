@@ -12,10 +12,10 @@ class bcolors:
 
 def submit():
 
-    print bcolors.HEADER
-    print '#######################################################################'
-    print '                  Starting job(s) submission...                        '
-    print '#######################################################################' + bcolors.ENDC
+    print(bcolors.HEADER)
+    print('#######################################################################')
+    print('                  Starting job(s) submission...                        ')
+    print('#######################################################################' + bcolors.ENDC)
 
     parser = optparse.OptionParser(usage='usage: %prog [opts] FilenameWithSamples', version='%prog 1.0')
     parser.add_option('-q', '--queue', action='store', type=str, dest='queue', default='longlunch', help='Name of the queue to be used')
@@ -44,32 +44,32 @@ def submit():
 
     #Check the options given
     if queue not in ['espresso', 'microcentury', 'longlunch', 'workday', 'tomorrow', 'testmatch', 'nextweek']:
-        print "Queue not found.... Using tomorrow as default value."
+        print("Queue not found.... Using tomorrow as default value.")
         queue = "tomorrow"
     
     if year == "":
-        print "BE CAREFUL! You did not introduce any year, so 2017 files are considered by default"
+        print("BE CAREFUL! You did not introduce any year, so 2017 files are considered by default")
         year = "2017"
     elif year != "2016_HIPM" and year != "2016_noHIPM" and year != "2017" and year != "2018" and year != "2022" and year != "2022EE":
-        print "The year given does not seem to be valid"
+        print("The year given does not seem to be valid")
         return
 
     if not inputDir:
-        print "You have to specify the directory read the input files can be found using the -d option."
+        print("You have to specify the directory read the input files can be found using the -d option.")
         return
 
     #Print the options chosen to the user
-    print bcolors.OKBLUE
-    print '#######################################################################'
-    print '                  Summary of options chosen                        '
-    print '#######################################################################'
+    print(bcolors.OKBLUE)
+    print('#######################################################################')
+    print('                  Summary of options chosen                        ')
+    print('#######################################################################')
 
-    print "Queue: "+queue;
-    print "Year: "+year;
-    print "Input directory: "+inputDir
-    print "Output directory: "+outputDir
+    print("Queue: "+queue);
+    print("Year: "+year);
+    print("Input directory: "+inputDir)
+    print("Output directory: "+outputDir)
 
-    print '#######################################################################' + bcolors.ENDC
+    print('#######################################################################' + bcolors.ENDC)
 
     #Read the files from the input directory
     jobs = []
@@ -101,7 +101,7 @@ def submit():
                     jobs.append(sample)
 
     if len(jobs) == 0:
-        print "No file matching the requirements in the directory given has been found"
+        print("No file matching the requirements in the directory given has been found")
         return
 
     jobsList = []
@@ -144,6 +144,7 @@ def submit():
         subFile.write('error = '+ errFileName +'\n')
         subFile.write('log = '+ logFileName +'\n')
         subFile.write('+JobFlavour  = '+ queue +'\n')
+        subFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
         subFile.write('queue \n')
         subFile.close()
         
@@ -157,6 +158,7 @@ def submit():
     completeJobFile.write('error = '+outputDir+'$(job).err \n')
     completeJobFile.write('log = '+outputDir+'$(job).log \n')
     completeJobFile.write('+JobFlavour  = '+ queue +'\n')
+    completeJobFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
     completeJobFile.write('queue job in (\n')
     for job in jobsList:
         if job != "" and job != "\n":
@@ -165,12 +167,14 @@ def submit():
     #completeJobFile.write('queue job from '+inputFile)
     completeJobFile.close()
 
+    os.system("chmod +x " + outputDir + "/*sh")
+
     if doNotSend == 0:
         #print outputDir
         os.system("condor_submit " + outputDir + "all.sub")
-        print "Done! "+ str(len(jobs)) +" jobs have been submitted. \n"        
+        print("Done! "+ str(len(jobs)) +" jobs have been submitted. \n")        
     else:
-        print "Done! However, the jobs have not been sent to the queue. \n"
+        print("Done! However, the jobs have not been sent to the queue. \n")
 
 if __name__ == "__main__":
     submit()
