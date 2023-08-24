@@ -54,6 +54,7 @@ void nanoFakes::Begin(TTree*)
 
   if (option.find("2016_noHIPM") != std::string::npos) year_length = 11;
   if (option.find("2016_HIPM")   != std::string::npos) year_length = 9;
+  if (option.find("2022EE")   != std::string::npos) year_length = 6;
 
   year     = option.substr(0,year_length);
   filename = option.erase(0,year_length);
@@ -61,7 +62,8 @@ void nanoFakes::Begin(TTree*)
   printf("     year: %s\n", year.Data());
   printf(" filename: %s\n", filename.Data());
   printf("\n");
-  
+
+  /**
   if (!filename.Contains("Run20")) {
 
     baseW            = {fReader, "baseW"};
@@ -69,6 +71,7 @@ void nanoFakes::Begin(TTree*)
     puWeight         = {fReader, "puWeight"};
     Generator_weight = {fReader, "Generator_weight"};
   }
+  **/
 
   ismc = (filename.Contains("Run20")) ? false : true;
 
@@ -291,7 +294,9 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
   event_weight = 1.0;
 
-
+  unsigned int nLepton = Lepton_pt.GetSize();
+  unsigned int nCleanJet = CleanJet_pt.GetSize();
+  
   // Make Z candidate
   //------------------------------------------------------------------------  
   Zlepton1type   = Loose;
@@ -301,9 +306,9 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
   m2l = -999.0;
 
-  if (*nLepton >= 2) {
+  if (nLepton >= 2) {
 
-    for (unsigned int iLep1=0; iLep1<*nLepton; iLep1++) {
+    for (unsigned int iLep1=0; iLep1<nLepton; iLep1++) {
       
       if (Lepton_pt[iLep1] < 25.) continue;
 
@@ -315,7 +320,7 @@ Bool_t nanoFakes::Process(Long64_t entry)
 	Zlepton1idisoW = 1.0;  // Temporary value until put in the trees
       }
 
-      for (unsigned int iLep2=iLep1+1; iLep2<*nLepton; iLep2++) {
+      for (unsigned int iLep2=iLep1+1; iLep2<nLepton; iLep2++) {
 	
 	if (Lepton_pt[iLep2] < 10.) continue;
 
@@ -336,8 +341,8 @@ Bool_t nanoFakes::Process(Long64_t entry)
 	  leptonIndex = iLep2;
 	  
 	  // Is the second lepton tight?
-	  if ((abs(Lepton_pdgId[iLep2]) == 11 && eleTightWP[iLep2] > 0.5) ||
-	      (abs(Lepton_pdgId[iLep2]) == 13 && muonTightWP[iLep2] > 0.5)) {
+	  if ((abs(Lepton_pdgId[iLep2]) == 11 && (int)eleTightWP[iLep2] > 0.5) ||
+	      (abs(Lepton_pdgId[iLep2]) == 13 && (int)muonTightWP[iLep2] > 0.5)) {
 	    
 	    Zlepton2type   = Tight;
 	    Zlepton2idisoW = 1.0;  // Temporary value until put in the trees
@@ -354,8 +359,10 @@ Bool_t nanoFakes::Process(Long64_t entry)
   //----------------------------------------------------------------------------
   bool passTrigger = false;
 
-  if (ismc) event_weight = (*baseW/1e3) * (*puWeight) * (*Generator_weight);
+  //if (ismc) event_weight = (*baseW/1e3) * (*puWeight) * (*Generator_weight);
 
+  if (ismc) event_weight = (*baseW/1e3) * (*Generator_weight);
+  
   if (event_weight > 2.) return kTRUE;  // Remove events with large weight
 
   if (ismc) {
@@ -418,7 +425,7 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
   // Away jet determination
   //----------------------------------------------------------------------------
-  if (*nCleanJet > 0) {
+  if (nCleanJet > 0) {
 
     TLorentzVector tlvLepton;
   
@@ -430,7 +437,7 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
       inputJetEt = (channel == e) ? elejetet[i] : muonjetet[i];
     
-      for (unsigned int j=0; j<*nCleanJet; j++) {
+      for (unsigned int j=0; j<nCleanJet; j++) {
       
 	if (CleanJet_pt[j]       < 10.)        continue;
 	if (abs(CleanJet_eta[j]) > 2.5)        continue;
@@ -455,12 +462,12 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
       // Debug 2016_HIPM - Muons
       //------------------------------------------------------------------------
-      if ((channel == m) && (*nLepton == 1) && passJets && passTrigger) {
+      if ((channel == m) && (nLepton == 1) && passJets && passTrigger) {
 
 	h_Muon_loose_met [FR_02_Debug][i][0]->Fill(*PuppiMET_pt, event_weight);
 	h_Muon_loose_mtw1[FR_02_Debug][i][0]->Fill(*mtw1,        event_weight);
 
-	if (muonTightWP[0] > 0.5) {
+	if ((int)muonTightWP[0] > 0.5) {
 	  h_Muon_tight_met [FR_02_Debug][i][0]->Fill(*PuppiMET_pt, event_weight);
 	  h_Muon_tight_mtw1[FR_02_Debug][i][0]->Fill(*mtw1,        event_weight);
 	}
@@ -469,12 +476,12 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
       // Debug 2016_HIPM - Electrons
       //------------------------------------------------------------------------
-      if ((channel == e) && (*nLepton == 1) && passJets && passTrigger) {
+      if ((channel == e) && (nLepton == 1) && passJets && passTrigger) {
 
 	h_Ele_loose_met [FR_02_Debug][i][0]->Fill(*PuppiMET_pt, event_weight);
 	h_Ele_loose_mtw1[FR_02_Debug][i][0]->Fill(*mtw1,        event_weight);
 
-	if (eleTightWP[0] > 0.5) {
+	if ((int)eleTightWP[0] > 0.5) {
 	  h_Ele_tight_met [FR_02_Debug][i][0]->Fill(*PuppiMET_pt, event_weight);
 	  h_Ele_tight_mtw1[FR_02_Debug][i][0]->Fill(*mtw1,        event_weight);
 	}
@@ -485,7 +492,7 @@ Bool_t nanoFakes::Process(Long64_t entry)
       //------------------------------------------------------------------------
       bool passCuts = passTrigger;
 
-      passCuts &= (*nLepton == 1);
+      passCuts &= (nLepton == 1);
       passCuts &= (*mtw1 < 20.);
       passCuts &= (*PuppiMET_pt < 20.);
 
@@ -496,7 +503,7 @@ Bool_t nanoFakes::Process(Long64_t entry)
       //------------------------------------------------------------------------
       passCuts = passTrigger;
 
-      passCuts &= (*nLepton > 1);
+      passCuts &= (nLepton > 1);
       passCuts &= (*PuppiMET_pt < 20.);
       passCuts &= (m2l > 20.);
 
@@ -681,7 +688,7 @@ void nanoFakes::FillAnalysisHistograms(int icut, int i)
 
       // Tight electrons
       //------------------------------------------------------------------------
-      if (eleTightWP[0] > 0.5) {
+      if ((int)eleTightWP[0] > 0.5) {
 	
 	h_Ele_tight_pt_eta_bin[icut][i][btag]->Fill(Lepton_pt[0], lep1eta, event_weight);
 	h_Ele_tight_pt_bin    [icut][i][btag]->Fill(Lepton_pt[0], event_weight);
