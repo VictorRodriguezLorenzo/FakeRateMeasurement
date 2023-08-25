@@ -2,7 +2,7 @@
 
 Log in to lxplus.
 
-    ssh -Y piedra@lxplus8.cern.ch -o ServerAliveInterval=240
+    ssh -Y piedra@lxplus.cern.ch -o ServerAliveInterval=240
     bash -l
 
 # First time
@@ -12,7 +12,7 @@ Setup the CMSSW release. The code `nanoFakes.C` fails with (at least) `10_2_0` a
     cd work
     mkdir fakes
 
-    export SCRAM_ARCH=el8_amd64_gcc11
+    export SCRAM_ARCH=slc7_amd64_gcc11
     cmsrel CMSSW_13_0_5_patch2
     cd CMSSW_13_0_5_patch2/src
     cmsenv
