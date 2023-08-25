@@ -144,7 +144,7 @@ def submit():
         subFile.write('error = '+ errFileName +'\n')
         subFile.write('log = '+ logFileName +'\n')
         subFile.write('+JobFlavour  = '+ queue +'\n')
-        subFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
+        #subFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
         subFile.write('queue \n')
         subFile.close()
         
@@ -158,7 +158,7 @@ def submit():
     completeJobFile.write('error = '+outputDir+'$(job).err \n')
     completeJobFile.write('log = '+outputDir+'$(job).log \n')
     completeJobFile.write('+JobFlavour  = '+ queue +'\n')
-    completeJobFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
+    #completeJobFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
     completeJobFile.write('queue job in (\n')
     for job in jobsList:
         if job != "" and job != "\n":
