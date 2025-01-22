@@ -43,13 +43,13 @@ void runNanoFakes(TString year = "2017", TString filename = "NONE")
     }
   else if (year == "2022")
     {
-      path_mc   = "";
-      path_data = "";
+      path_mc   = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22_130x_nAODv12_Full2022v12/MCl1loose2022v12__fakeSelKinMC/";
+      path_data = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022_ReReco_nAODv12_Full2022v12/DATAl1loose2022v12__fakeSel/";
     }
   else if (year == "2022EE")
     {
-      path_mc   = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22EE_126x_nAODv11_Full2022v11/MCl1loose2022EEv11__fakeSelKinMC/";
-      path_data = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022_Prompt_nAODv11_Full2022v11/DATAl1loose2022EEv11__fakeSel/";
+      path_mc   = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22EE_130x_nAODv12_Full2022v12/MCl1loose2022EEv12__MCCorr2022EEv12_ReRecoE_PromptFG/"; 
+      path_data = "/eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022EE_Prompt_nAODv12_Full2022v12/DATAl1loose2022EEv12__fakeSel/";
     }
   else
     {

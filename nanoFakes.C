@@ -63,17 +63,16 @@ void nanoFakes::Begin(TTree*)
   printf(" filename: %s\n", filename.Data());
   printf("\n");
 
-  /**
-  if (!filename.Contains("Run20")) {
-
-    baseW            = {fReader, "baseW"};
-    Xsec             = {fReader, "Xsec"};
-    puWeight         = {fReader, "puWeight"};
-    Generator_weight = {fReader, "Generator_weight"};
+  //REMEMBER THIS IS JUST FOR MC
+  if (!filename.Contains("Run20")) {      
+      baseW = TTreeReaderValue<Double_t>(fReader, "baseW");
+      Generator_weight = TTreeReaderValue<Float_t>(fReader, "Generator_weight");
   }
-  **/
+  
 
-  ismc = (filename.Contains("Run20")) ? false : true;
+  ismc = !filename.Contains("Run20");
+  
+  cout << "The MC bool is:" << ismc << "\n";
 
   root_output = new TFile("results/" + filename + ".root", "recreate");
 
@@ -119,22 +118,22 @@ void nanoFakes::Begin(TTree*)
       muonHighPtPrescale = 45.781;
     }
   else if (year == "2022")
-    {
-      printf(" Reading %s prescales\n\n", year.Data());
-      
-      eleLowPtPrescale   = 0.0;  // Ele8
-      eleHighPtPrescale  = 0.0;
-      muonLowPtPrescale  = 0.0;
-      muonHighPtPrescale = 0.0; 
-    }
-  else if (year == "2022EE")
-    {
-      printf(" Reading %s prescales\n\n", year.Data());  // Temporal lumi for Run2022FG prompt reco data
+  {
+	  printf(" Reading %s prescales\n\n", year.Data());
 
-      eleLowPtPrescale   = 2.864891971;  // Ele8
-      eleHighPtPrescale  = 16.128280724; // Ele23
-      muonLowPtPrescale  = 3.845615262;  // Mu8
-      muonHighPtPrescale = 16.252956481; // Mu17
+	  eleLowPtPrescale   = 1.059025;  // Ele8
+	  eleHighPtPrescale  = 5.961920;
+	  muonLowPtPrescale  = 1.346244;
+	  muonHighPtPrescale = 6.191225;
+}  
+else if (year == "2022EE")
+    {
+	    printf(" Reading %s prescales\n\n", year.Data());  // Temporal lumi for Run2022FG prompt reco data
+
+      eleLowPtPrescale   = 3.621576;  // Ele8
+      eleHighPtPrescale  = 20.388134; // Ele23
+      muonLowPtPrescale  = 5.024321;  // Mu8
+      muonHighPtPrescale = 20.679355; // Mu17
     }
 
 
@@ -361,9 +360,11 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
   //if (ismc) event_weight = (*baseW/1e3) * (*puWeight) * (*Generator_weight);
 
-  if (ismc) event_weight = (*baseW/1e3) * (*Generator_weight);
-  
-  if (event_weight > 2.) return kTRUE;  // Remove events with large weight
+  if (ismc) {event_weight = (*baseW/1e3) * (*Generator_weight);
+		}
+  if (event_weight > 2.) {return kTRUE;
+		}
+  // Remove events with large weight
 
   if (ismc) {
 
@@ -397,7 +398,7 @@ Bool_t nanoFakes::Process(Long64_t entry)
 
   } else {
 
-    if ((filename.Contains("DoubleMuon") or filename.Contains("SingleMuon")) && channel == m) {
+    if ((filename.Contains("DoubleMuon") or filename.Contains("SingleMuon") or filename.Contains("_Muon_")) && channel == m) {
       
       if (Lepton_pt[0] <= 20. && *HLT_Mu8_TrkIsoVVL > 0.5) {
       

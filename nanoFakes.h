@@ -170,42 +170,55 @@ class nanoFakes : public TSelector
 
   // Readers
   //---------------------------------------------------------------------------- 
-  TTreeReaderValue<Double_t> baseW;
-  TTreeReaderValue<Float_t> Generator_weight;
+  
+  //FOR2017
+  //TTreeReaderValue<Float_t> baseW;
+  //TTreeReaderArray<Int_t> Muon_jetIdx;
+  //TTreeReaderArray<Int_t> Electron_jetIdx;
+  //TTreeReaderValue<UInt_t> nCleanJet;
+  //TTreeReaderValue<Float_t> mtw1;
+  //TTreeReaderValue<Float_t> dphilep1jet1;
+  //TTreeReaderArray<Int_t> eleTightWP;
+  //TTreeReaderArray<Int_t> muonTightWP;
+
+  //FOR2022
+  TTreeReaderValue<Double_t> baseW; 
+  TTreeReaderValue<Float_t> Generator_weight;  
+  TTreeReaderArray<Short_t> Muon_jetIdx;
+  TTreeReaderArray<Short_t> Electron_jetIdx;
+  TTreeReaderValue<Double_t> mtw1; 
+  TTreeReaderValue<Double_t> dphilep1jet1;  
+  TTreeReaderArray<Bool_t> muonTightWP;   
+  TTreeReaderArray<Bool_t> eleTightWP;  
+  
+
+ 
   TTreeReaderArray<Int_t> Lepton_pdgId;
   TTreeReaderArray<Float_t> Lepton_pt;
   TTreeReaderArray<Float_t> Lepton_eta;
   TTreeReaderArray<Float_t> Lepton_phi;
   TTreeReaderArray<Float_t> Jet_btagDeepFlavB;
-
   TTreeReaderArray<Int_t> Lepton_muonIdx;
-  TTreeReaderArray<Int_t> Muon_jetIdx;
   TTreeReaderArray<Int_t> Lepton_electronIdx;
-  TTreeReaderArray<Int_t> Electron_jetIdx;
 
-  //TTreeReaderValue<UInt_t> nCleanJet;
   TTreeReaderArray<Float_t> CleanJet_pt;
   TTreeReaderArray<Float_t> CleanJet_eta;
   TTreeReaderArray<Float_t> CleanJet_phi;
 
-  TTreeReaderValue<Double_t> mtw1;
   TTreeReaderValue<Float_t> PuppiMET_pt;
-  TTreeReaderValue<Double_t> dphilep1jet1;
+ 
   TTreeReaderArray<Float_t> Electron_pfRelIso03_all;
 
   TTreeReaderValue<Bool_t> HLT_Mu8_TrkIsoVVL;
   TTreeReaderValue<Bool_t> HLT_Mu17_TrkIsoVVL;
   TTreeReaderValue<Bool_t> HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30;
-  TTreeReaderValue<Bool_t> HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30;
   TTreeReaderValue<Bool_t> HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30;
 
-  TTreeReaderArray<Bool_t> muonTightWP;
-  TTreeReaderArray<Bool_t> eleTightWP;
+
+
 
   nanoFakes(TTree* /*tree*/=0) :
     fReader(),
-    baseW (fReader, "baseW"),
-    Generator_weight (fReader, "Generator_weight"),
     Lepton_pdgId (fReader, "Lepton_pdgId"),
     Lepton_pt (fReader, "Lepton_pt"),
     Lepton_eta (fReader, "Lepton_eta"),
@@ -226,10 +239,15 @@ class nanoFakes : public TSelector
     HLT_Mu8_TrkIsoVVL (fReader, "HLT_Mu8_TrkIsoVVL"),
     HLT_Mu17_TrkIsoVVL (fReader, "HLT_Mu17_TrkIsoVVL"),
     HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30 (fReader, "HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30"),
-    HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 (fReader, "HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30"),
     HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30 (fReader, "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30"),
-    muonTightWP (fReader, "Lepton_isTightMuon_cut_Tight_HWWW"),
+    
+    //FOR2022
+    muonTightWP (fReader, "Lepton_isTightMuon_cut_Tight_HWW"),
     eleTightWP (fReader, "Lepton_isTightElectron_mvaWinter22V2Iso_WP90")
+    
+    //FOR2017
+    //muonTightWP (fReader, "Lepton_isTightMuon_cut_Tight_HWWW"),
+    //eleTightWP (fReader, "Lepton_isTightElectron_mvaFall17V2Iso_WP90")
   {
     Reset();
   };

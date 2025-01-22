@@ -11,8 +11,8 @@ const Float_t year_lumi[6] = {
   17.0,  // 2016_noHIPM
   41.5,  // 2017
   59.7,  // 2018
-  0.0    // 2022 Not yet
-  21.1   // 2022EE Without Run2022E, only 2022FG PromptReco
+  8.47,    // 2022 
+  21.1,   // 2022EE
 };
 
 const TString year_name[6] = {
@@ -21,7 +21,7 @@ const TString year_name[6] = {
   "2017",
   "2018",
   "2022",
-  "2022EE"
+  "2022EE",
 };
 
 
@@ -39,7 +39,7 @@ Bool_t  performPromptRate       = true;
 Bool_t  performElectronFakeRate = true;
 Bool_t  performMuonFakeRate     = true;
 Bool_t  performAllJetFakeRate   = false;
-Bool_t  performDataMC           = false;
+Bool_t  performDataMC           = true; 
 
 TFile*  dataFR;
 TFile*  wjetsFR;
@@ -124,8 +124,9 @@ TLegend* DrawLegend  (Float_t     x1,
 //    Float_t the_muojetet = 25 | -1
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void getFakeRate(TString the_year      = "2016_HIPM",
-		 TString the_leptondir = "cut_Tight80x_tthmva_80__mvaFall17V2Iso_WP90",
+void getFakeRate(TString the_year      = "2022EE",
+		 //TString the_leptondir = "cut_Tight80x_tthmva_80__mvaFall17V2Iso_WP90",
+		 TString the_leptondir = "",
 		 Float_t the_elejetet  = 35,
 		 Float_t the_muojetet  = 25)
 {

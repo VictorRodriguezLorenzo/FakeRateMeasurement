@@ -94,9 +94,11 @@ def submit():
                 if resubmit is False or not os.path.exists('results/'+sample):
                     jobs.append(sample)
         elif year == "2022":
-            pass # temporal
-        elif year == "2022EE":
             if ("DYto2L-2Jets_MLL-50__" in sample) or ("DYto2L-2Jets_MLL-10to50__" in sample) or ("WToLNu-2Jets__" in sample) or ("Muon_" in sample) or ("EGamma" in sample):
+                if resubmit is False or not os.path.exists('results/'+sample):
+                    jobs.append(sample)
+        elif year == "2022EE":
+            if ("DYto2L-2Jets_MLL-50__" in sample) or ("DYto2L-2Jets_MLL-10to50__" in sample) or ("WToLNu-2Jets__" in sample) or ("_Muon_" in sample) or ("EGamma" in sample):
                 if resubmit is False or not os.path.exists('results/'+sample):
                     jobs.append(sample)
 
@@ -129,22 +131,27 @@ def submit():
         jidFileName = outputDir+job + ".jid"
         
         jobFile = open(jobFileName, "w+")
-        jobFile.write("#!/bin/sh \n")
-        jobFile.write("cd - \n")
-        jobFile.write("cd " + workDir + "\n")
+        jobFile.write("#!/bin/bash \n")
+        jobFile.write("export X509_USER_PROXY=/afs/cern.ch/user/v/victorr/.proxy \n")
+        jobFile.write("voms-proxy-info \n")
+        jobFile.write("export SCRAM_ARCH=slc7_amd64_gcc700 \n")
+        jobFile.write("export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n")
+        jobFile.write("source $VO_CMS_SW_DIR/cmsset_default.sh \n")
+        jobFile.write("cd " + workDir + " \n")
+        jobFile.write("ulimit -c 0 \n")
         jobFile.write("eval `scramv1 runtime -sh` \n \n")
 
         jobFile.write("root -l -b -q '" + workDir + "/runNanoFakes.C(\"" + year + "\", \"" + job + "\")' \n \n")
         jobFile.close()
-        
+
         subFile = open(subFileName, "w+")
+        subFile.write('MY.SingularityImage = "/cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-cat/cmssw-lxplus/cmssw-el7-lxplus:latest/"\n')
         subFile.write('executable = '+jobFileName+'\n')
         subFile.write('universe = vanilla\n')
         subFile.write('output = '+ outFileName +'\n')
         subFile.write('error = '+ errFileName +'\n')
         subFile.write('log = '+ logFileName +'\n')
         subFile.write('+JobFlavour  = '+ queue +'\n')
-        #subFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
         subFile.write('queue \n')
         subFile.close()
         
@@ -152,13 +159,13 @@ def submit():
             jobsList.append(job)
 
     completeJobFile = open(outputDir+"all.sub", "w+")    
+    completeJobFile.write('MY.SingularityImage = "/cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-cat/cmssw-lxplus/cmssw-el7-lxplus:latest/"\n')
     completeJobFile.write('executable = '+outputDir+'$(job).sh \n')
     completeJobFile.write('universe = vanilla \n')
     completeJobFile.write('output = '+outputDir+'$(job).out \n')
     completeJobFile.write('error = '+outputDir+'$(job).err \n')
     completeJobFile.write('log = '+outputDir+'$(job).log \n')
     completeJobFile.write('+JobFlavour  = '+ queue +'\n')
-    #completeJobFile.write('requirements = (OpSysAndVer =?= "CentOS8") \n')
     completeJobFile.write('queue job in (\n')
     for job in jobsList:
         if job != "" and job != "\n":
