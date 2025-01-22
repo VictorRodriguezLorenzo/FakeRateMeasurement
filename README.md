@@ -41,7 +41,7 @@ Check (and edit if needed) the following files.
 
 # Submit jobs
 
-**2022/07/13, open issue.** The option `-d` below does not seem to fully work. It helps (at least for 2017 and 2018) choosing between data and MC, but the full path is read from `runNanoFakes.C`.
+
 
 ### 2016_HIPM
 
@@ -68,10 +68,16 @@ Read trees without any mtw1 cut to debug the 2016_HIPM negative fakes.
     python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Summer20UL18_106x_nAODv9_Full2018v9/MCl1loose2018v9__fakeSelKinMC/ -y 2018
     python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Run2018_UL2018_nAODv9_Full2018v9/DATAl1loose2018v9__fakeSel -y 2018
 
+### 2022 (NEW POST PROD ON THE WAY)
+
+    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22_130x_nAODv12_Full2022v12/MCl1loose2022v12__fakeSelKinMC/ -y 2022
+    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022_ReReco_nAODv12_Full2022v12/DATAl1loose2022v12__fakeSel/ -y 2022
+
+
 ### 2022EE
 
-    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22EE_126x_nAODv11_Full2022v11/MCl1loose2022EEv11__fakeSelKinMC/ -y 2022EE
-    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022_Prompt_nAODv11_Full2022v11/DATAl1loose2022EEv11__fakeSel -y 2022EE
+    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Summer22EE_130x_nAODv12_Full2022v12/MCl1loose2022EEv12__MCCorr2022EEv12_ReRecoE_PromptFG/ -y 2022EE
+    python submitJobs.py -d /eos/cms/store/group/phys_higgs/cmshww/calderon/HWWNano/Run2022EE_Prompt_nAODv12_Full2022v12/DATAl1loose2022EEv12__fakeSel/ -y 2022EE
 
 # Babysit jobs
 
@@ -80,6 +86,8 @@ Read trees without any mtw1 cut to debug the 2016_HIPM negative fakes.
 
 # Wrap it up
 
+### FOR THE YEARS 2016, 2017 AND 2018
+    
     cd results
 
     hadd -f -k hadd_wjets.root nanoLatino_WJetsToLNu*.root
@@ -96,6 +104,16 @@ For 2018 data there are too many files, and the `hadd` has to be done in two ste
     rm hadd_EGamma_Run2018.root
     rm hadd_DoubleMuon_Run2018.root
 
+### FOR THE YEAR 2022
+
+    cd results
+
+    hadd -f -k hadd_wjets.root *WToLNu-2Jets__*.root
+
+    hadd -f -k hadd_zjets.root *DYto2L*.root
+
+    hadd -f -k hadd_data.root  nanoLatino_*_Run202*.root
+
 Move the merged files to their corresponding year directory.
 
     rm nanoLatino*
@@ -105,19 +123,6 @@ Move the merged files to their corresponding year directory.
 # Extract the fake and prompt rates
 
     root -l -b -q getFakeRate.C
-
-# Share on the web
-
-    cp -r png /afs/cern.ch/user/p/piedra/www/ul_fakerate
-
-    pushd /afs/cern.ch/user/p/piedra/www/ul_fakerate
-    cp ../index.php .
-    find . -type d -exec cp index.php {} \;
-    popd
-
-And the results should appear [here](https://piedra.web.cern.ch/piedra/ul_fakerate),
-
-    https://piedra.web.cern.ch/piedra/ul_fakerate
 
 # Some relevant physics
 
